@@ -51,13 +51,16 @@ class _CreateTicketState extends State<CreateTicket> {
           ),
           const Spacer(),
           TextButton(
-            onPressed: () => context.read<GetTicketsCubit>().createTicket(
-                  TicketHiveModel(
-                    name: _nameController.value.text,
-                    seat: _seatController.value.text,
-                    isOpeningCeremony: dropdownValue == "OpeningCeremony",
-                  ),
-                ),
+            onPressed: () {
+              context.read<GetTicketsCubit>().createTicket(
+                    TicketHiveModel(
+                      name: _nameController.value.text,
+                      seat: _seatController.value.text,
+                      isOpeningCeremony: dropdownValue == "OpeningCeremony",
+                    ),
+                  );
+              Navigator.of(context).pop();
+            },
             style: const ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.blueGrey),
             ),
