@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:demo_day/features/tickets/data/models/ticket_hive_model.dart';
+import 'package:demo_day/features/tickets/presentation/create_ticket.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -14,6 +15,26 @@ class GetTicketsCubit extends Cubit<GetTicketsState> {
   getTickets() async {
     emit(const GetTicketsState.loading());
     try {
+      final data = ticketBox.values.toList();
+      final openingCeremonyTickets =
+          data.where((element) => element.isOpeningCeremony!);
+      final closingCeremonyTickets =
+          data.where((element) => !element.isOpeningCeremony!);
+      emit(
+        GetTicketsState.success(
+          openingCeremonyTickets.toList(),
+          closingCeremonyTickets.toList(),
+        ),
+      );
+    } catch (e) {
+      emit(GetTicketsState.error(e.toString()));
+    }
+  }
+
+  createTicket(TicketHiveModel ticketHiveModel) async {
+    emit(const GetTicketsState.loading());
+    try {
+      ticketBox.add(ticketHiveModel);
       final data = ticketBox.values.toList();
       final openingCeremonyTickets =
           data.where((element) => element.isOpeningCeremony!);
